@@ -6,42 +6,37 @@ var dateFormat = require("dateFormat")
 var fs = require("fs")
 
 // Takes an artist and searches the Bands in Town 
-// Artist API for an artist and render information
+// BandsinTown API for an artist and render information
 let concertInfo= function(artist){
     let region = ""
     let queryUrl = "https://rest.bandsintown.com/artists/" + artist.replace(" ", "+") + "/events?app_id=codingbootcamp"
-    //console.log(queryUrl);
     
     request(queryUrl, function(err, response, body){
-        // If the request is successful
         if (!err && response.statusCode === 200) {
-            // Save parsed body in a new variable for easier use
             let concertData = JSON.parse(body)
             
             outputData(artist + " concert information:")
 
-            for (i=0; i < concertInfo.length; i++) {
+            for (i=0; i < concertData.length; i++) {
                 
                 region = concertData[i].venue.region
-                 //handle Canadian venues
                 if (region === "") {
-                    region = concertInfo[i].venue.country
+                    region = concertData[i].venue.country
                 }
 
                 // Need to return Name of venue, Venue location, Date of event (MM/DD/YYYY)
-                outputData("Venue: " + concertInfo[i].venue.name)
-                outputData("Location: " + concertInfo[i].venue.city + ", " + region);
-                outputData("Date: " + dateFormat(concertInfo[i].datetime, "mm/dd/yyyy"))
+                outputData("Venue: " + concertData[i].venue.name)
+                outputData("Location: " + concertData[i].venue.city + ", " + region);
+                outputData("Date: " + dateFormat(concertData[i].datetime, "mm/dd/yyyy"))
             }
         }
     })
 }
 
-// This will take a song, search spotify and return information
-let spotifyThisSong = function(song){
-    // Default should be "The Sign" by Ace of Base
+// This will take a song, search spotify and return information. Default song Buddy Holly 
+let spotifySongInfo = function(song){
     if (!song){
-        song = "The Sign Ace of Base"
+        song = "Buddy Holly"
     }
 
     let spotify = new Spotify(keys.spotify);
@@ -50,8 +45,6 @@ let spotifyThisSong = function(song){
         if (err) {
             return console.log(err)
         }
-
-        // Need to return Artist(s), Song Name, Album, Preview link of song from Spotify
         let songInfo = data.tracks.items[0]
         outputData(songInfo.artists[0].name)
         outputData(songInfo.name)
@@ -60,19 +53,16 @@ let spotifyThisSong = function(song){
     })
 }
 
-// This will take a movie, search IMDb and return information
+// This will take a movie, search IMDb and return information. Defaut Tag.
 let movieSelection = function(movie){
-    // Default should be "Mr. Nobody"
     if (!movie){
-        movie = "Mr.+Nobody"
+        movie = "Tag"
     }
 
     let queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
-    //console.log(queryUrl);
-
-    // Then create a request to the queryUrl
+ 
     request(queryUrl, function(err, response, body){
-        // If the request is successful
+        // If the request is successful then...
         if (!err && response.statusCode === 200) {
             // Need to return: Title, Year, IMDB Rating, Rotten Tomatoes Rating, Country, 
             // Language, Plot, Actors
@@ -93,16 +83,12 @@ let movieSelection = function(movie){
 // Using the `fs` Node package, LIRI will take the text inside of random.txt
 // and then use it to call one of LIRI's commands.
 let userAction = function(){
-
-    // read from file
     fs.readFile("random.txt", "utf8", function (err, data) {
         if(err){
             return console.log(err)
         }
         
         let dataArr = data.split(",")
-
-        // call appropriate function and pass arguement
         runAction(dataArr[0], dataArr[1])
     });
 }
@@ -120,20 +106,20 @@ let outputData = function(data) {
 
 let runAction = function(func, parm) {
     switch (func) {
-        case "concert-this":
-            concertThis(parm)
+        case "concert-Info":
+         concertInfo(parm)
             break
         case "spotify-this-song":
-            spotifyThisSong(parm)
+         spotifySongInfo(parm)
             break
-        case "movie-this":
-            movieThis(parm)
+        case "movie-Selection":
+         movieSelection(parm)
             break
         case "user-Action":
-            userAction()
+         userAction()
             break
         default:
-            outputData("That is not a command that I recognize, please try again.") 
+         outputData("That is not a command that I recognize, please try again.") 
     }
 }
 
