@@ -18,20 +18,19 @@ let concertInfo= function(artist){
             // Save parsed body in a new variable for easier use
             let concertData = JSON.parse(body)
             
-            outputData(artist + " concert information:")
+            console.log(artist + " concert information:")
 
             for (i=0; i < concertInfo.length; i++) {
                 
                 region = concertData[i].venue.region
-                 //handle Canadian venues
                 if (region === "") {
                     region = concertInfo[i].venue.country
                 }
 
                 // Need to return Name of venue, Venue location, Date of event (MM/DD/YYYY)
-                outputData("Venue: " + concertInfo[i].venue.name)
-                outputData("Location: " + concertInfo[i].venue.city + ", " + region);
-                outputData("Date: " + dateFormat(concertInfo[i].datetime, "mm/dd/yyyy"))
+                console.log("Venue: " + concertInfo[i].venue.name)
+                cconsole.log("Location: " + concertInfo[i].venue.city + ", " + region);
+                cconsole.log("Date: " + dateFormat(concertInfo[i].datetime, "mm/dd/yyyy"))
             }
         }
     })
@@ -41,7 +40,7 @@ let concertInfo= function(artist){
 let spotifyThisSong = function(song){
     // Default should be "The Sign" by Ace of Base
     if (!song){
-        song = "The Sign Ace of Base"
+        song = ""
     }
 
     let spotify = new Spotify(keys.spotify);
@@ -53,10 +52,10 @@ let spotifyThisSong = function(song){
 
         // Need to return Artist(s), Song Name, Album, Preview link of song from Spotify
         let songInfo = data.tracks.items[0]
-        outputData(songInfo.artists[0].name)
-        outputData(songInfo.name)
-        outputData(songInfo.album.name)
-        outputData(songInfo.preview_url)
+        console.log(songInfo.artists[0].name)
+        console.log(songInfo.name)
+        console.log(songInfo.album.name)
+        console.log(songInfo.preview_url)
     })
 }
 
@@ -78,14 +77,13 @@ let movieSelection = function(movie){
             // Language, Plot, Actors
             let movieInfo = JSON.parse(body)
 
-            outputData("Title: " + movieInfo.Title)
-            outputData("Release year: " + movieInfo.Year)
-            outputData("IMDB Rating: " + movieInfo.imdbRating)
-            outputData("Rotten Tomatoes Rating: " + movieInfo.Ratings[1].Value)
-            outputData("Country: " + movieInfo.Country)
-            outputData("Language: " + movieInfo.Language)
-            outputData("Plot: " + movieInfo.Plot)
-            outputData("Actors: " + movieInfo.Actors)
+            console.log("Title: " + movieInfo.Title)
+            console.log("Release year: " + movieInfo.Year)
+            console.log("IMDB Rating: " + movieInfo.imdbRating)
+            console.log("Rotten Tomatoes Rating: " + movieInfo.Ratings[1].Value)
+            console.log("Language: " + movieInfo.Language)
+            console.log("Plot: " + movieInfo.Plot)
+            console.log("Actors: " + movieInfo.Actors)
         }
     })
 }
@@ -108,15 +106,15 @@ let userAction = function(){
 }
 
 // This function will handle outputting to the console and writing to log file
-let outputData = function(data) {
-    console.log(data)
+//let outputData = function(data) {
+//     console.log(data)
 
-    fs.appendFile("log.txt", "\r\n" + data, function (err){
-        if(err){
-            return console.log(err)
-        } 
-    })
-}
+//     fs.appendFile("log.txt", "\r\n" + data, function (err){
+//         if(err){
+//             return console.log(err)
+//         } 
+//     })
+// }
 
 let runAction = function(func, parm) {
     switch (func) {
@@ -133,7 +131,7 @@ let runAction = function(func, parm) {
             userAction()
             break
         default:
-            outputData("That is not a command that I recognize, please try again.") 
+            aler("That is not a command that I recognize, please try again.") 
     }
 }
 
