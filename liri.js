@@ -7,7 +7,7 @@ var fs = require("fs")
 
 // Takes an artist and searches the Bands in Town 
 // BandsinTown API for an artist and render information
-let concertInfo= function(artist){
+let concertThis= function(artist){
     let region = ""
     let queryUrl = "https://rest.bandsintown.com/artists/" + artist.replace(" ", "+") + "/events?app_id=codingbootcamp"
     
@@ -15,7 +15,7 @@ let concertInfo= function(artist){
         if (!err && response.statusCode === 200) {
             let concertData = JSON.parse(body)
             
-            outputData(artist + " concert information:")
+            console.log(artist + " concert information:")
 
             for (i=0; i < concertData.length; i++) {
                 
@@ -25,16 +25,16 @@ let concertInfo= function(artist){
                 }
 
                 // Need to return Name of venue, Venue location, Date of event (MM/DD/YYYY)
-                outputData("Venue: " + concertData[i].venue.name)
-                outputData("Location: " + concertData[i].venue.city + ", " + region);
-                outputData("Date: " + dateFormat(concertData[i].datetime, "mm/dd/yyyy"))
+                console.log("Venue: " + concertInfo[i].venue.name)
+                console.log("Location: " + concertInfo[i].venue.city + ", " + region);
+                console.log("Date: " + dateFormat(concertInfo[i].datetime, "mm/dd/yyyy"))
             }
         }
     })
 }
 
 // This will take a song, search spotify and return information. Default song Buddy Holly 
-let spotifySongInfo = function(song){
+let spotifythisSong = function(song){
     if (!song){
         song = "Buddy Holly"
     }
@@ -46,15 +46,15 @@ let spotifySongInfo = function(song){
             return console.log(err)
         }
         let songInfo = data.tracks.items[0]
-        outputData(songInfo.artists[0].name)
-        outputData(songInfo.name)
-        outputData(songInfo.album.name)
-        outputData(songInfo.preview_url)
+        console.log(songInfo.artists[0].name)
+        console.log(songInfo.name)
+        console.log(songInfo.album.name)
+        console.log(songInfo.preview_url)
     })
 }
 
 // This will take a movie, search IMDb and return information. Defaut Tag.
-let movieSelection = function(movie){
+let movieThis = function(movie){
     if (!movie){
         movie = "Tag"
     }
@@ -68,24 +68,23 @@ let movieSelection = function(movie){
             // Language, Plot, Actors
             let movieInfo = JSON.parse(body)
 
-            outputData("Title: " + movieInfo.Title)
-            outputData("Release year: " + movieInfo.Year)
-            outputData("IMDB Rating: " + movieInfo.imdbRating)
-            outputData("Rotten Tomatoes Rating: " + movieInfo.Ratings[1].Value)
-            outputData("Country: " + movieInfo.Country)
-            outputData("Language: " + movieInfo.Language)
-            outputData("Plot: " + movieInfo.Plot)
-            outputData("Actors: " + movieInfo.Actors)
+            console.log("Title: " + movieInfo.Title)
+            console.log("Release year: " + movieInfo.Year)
+            console.log("IMDB Rating: " + movieInfo.imdbRating)
+            console.log("Rotten Tomatoes Rating: " + movieInfo.Ratings[1].Value)
+            console.log("Language: " + movieInfo.Language)
+            console.log("Plot: " + movieInfo.Plot)
+            console.log("Actors: " + movieInfo.Actors)
         }
     })
 }
 
 // Using the `fs` Node package, LIRI will take the text inside of random.txt
 // and then use it to call one of LIRI's commands.
-let userAction = function(){
+let doWhatItSays  = function(){
     fs.readFile("random.txt", "utf8", function (err, data) {
         if(err){
-            return console.log(err)
+            return err,
         }
         
         let dataArr = data.split(",")
@@ -94,32 +93,32 @@ let userAction = function(){
 }
 
 // This function will handle outputting to the console and writing to log file
-let outputData = function(data) {
-    console.log(data)
+//let outputData = function(data) {
+//     console.log(data)
 
-    fs.appendFile("log.txt", "\r\n" + data, function (err){
-        if(err){
-            return console.log(err)
-        } 
-    })
-}
+//     fs.appendFile("log.txt", "\r\n" + data, function (err){
+//         if(err){
+//             return console.log(err)
+//         } 
+//     })
+// }
 
 let runAction = function(func, parm) {
     switch (func) {
         case "concert-Info":
-         concertInfo(parm)
+         concertThis(parm)
             break
         case "spotify-this-song":
-         spotifySongInfo(parm)
+         spotifythisSong(parm)
             break
         case "movie-Selection":
-         movieSelection(parm)
+         movieThis(parm)
             break
         case "user-Action":
-         userAction()
+         doWhatItSays()
             break
         default:
-         outputData("That is not a command that I recognize, please try again.") 
+            alert("That is not a command that I recognize, please try again.") 
     }
 }
 
