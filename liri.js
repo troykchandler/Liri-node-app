@@ -25,9 +25,9 @@ let concertThis= function(artist){
                 }
 
                 // Need to return Name of venue, Venue location, Date of event (MM/DD/YYYY)
-                console.log("Venue: " + concertInfo[i].venue.name)
-                console.log("Location: " + concertInfo[i].venue.city + ", " + region);
-                console.log("Date: " + dateFormat(concertInfo[i].datetime, "mm/dd/yyyy"))
+                console.log("Venue: " + concertData[i].venue.name)
+                console.log("Location: " + concertData[i].venue.city + ", " + region);
+                console.log("Date: " + dateFormat(concertData[i].datetime, "mm/dd/yyyy"))
             }
         }
     })
@@ -36,7 +36,7 @@ let concertThis= function(artist){
 // This will take a song, search spotify and return information. Default song Buddy Holly 
 let spotifythisSong = function(song){
     if (!song){
-        song = "Buddy Holly"
+        song = ""
     }
 
     let spotify = new Spotify(keys.spotify);
@@ -53,7 +53,7 @@ let spotifythisSong = function(song){
     })
 }
 
-// This will take a movie, search IMDb and return information. Defaut Tag.
+// This should take a movie, search IMDb and return information. Defaut Tag.
 let movieThis = function(movie){
     if (!movie){
         movie = "Tag"
@@ -84,28 +84,27 @@ let movieThis = function(movie){
 let doWhatItSays  = function(){
     fs.readFile("random.txt", "utf8", function (err, data) {
         if(err){
-            return err,
+            return console.log(err)
         }
-        
+    
         let dataArr = data.split(",")
         runAction(dataArr[0], dataArr[1])
     });
 }
 
-// This function will handle outputting to the console and writing to log file
-//let outputData = function(data) {
-//     console.log(data)
 
-//     fs.appendFile("log.txt", "\r\n" + data, function (err){
-//         if(err){
-//             return console.log(err)
-//         } 
-//     })
-// }
+let outputData = function(data) {
+console.log(data)
+fs.appendFile("log.txt", "\r\n" + data, function (err){
+if(err){
+return console.log(err)
+} 
+})
+}
 
 let runAction = function(func, parm) {
     switch (func) {
-        case "concert-Info":
+        case "concert-Data":
          concertThis(parm)
             break
         case "spotify-this-song":
@@ -119,7 +118,7 @@ let runAction = function(func, parm) {
             break
         default:
             alert("That is not a command that I recognize, please try again.") 
-    }
+    
 }
-
+}
 runAction(process.argv[2], process.argv[3])

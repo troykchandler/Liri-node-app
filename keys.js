@@ -1,6 +1,5 @@
-var Spotify = require('node-spotify-api');
- 
-var spotify = new Spotify({
+exports.spotify = {
   id: process.env.Spotify_ID,
   secret: process.env.SPOTIFY_SECRET
-});
+};
+ 
